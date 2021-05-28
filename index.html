@@ -56,6 +56,13 @@
     <button>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({
+        token: "1c0e8169780643f59974caeab4983fbf"
+    });
+</script>
+
   <script>
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
@@ -63,11 +70,100 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
+      console.log(isNaN(secondNum));
+      try{
+        if(typeof firstNum != "number" || typeof secondNum != "number"){
+          throw new NotANum("Hello this is wrong.");
+        }
+      } catch (err) {
+        console.error(err.message);
+      } finally {
+        console.log("How did you not do something wrong?");
+      }
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+
+    errorBtns[0].addEventListener('click', ()=> {
+      console.log("Console Log Demo");
+    });
+
+    errorBtns[1].addEventListener('click', ()=> {
+      console.error("Console Error Demo");
+    });
+
+    errorBtns[2].addEventListener('click', ()=> {
+      console.dir(errorBtns);
+    });
+
+    errorBtns[3].addEventListener('click', ()=> {
+      console.dirxml(document);
+    });
+
+    errorBtns[4].addEventListener('click', ()=> {
+      console.error("Console Error");
+    });
+
+    errorBtns[5].addEventListener('click', ()=> {
+      console.group("Yummy Foods");
+      console.log("Ramen");
+      console.log("Boba");
+    });
+
+    errorBtns[6].addEventListener('click', ()=> {
+      console.groupEnd("Yummy Foods");
+      console.log("Yummy End");
+    });
+
+    errorBtns[7].addEventListener('click', ()=> {
+      console.table([
+        {
+          animal: "dog",
+          species: "cute"
+        },
+        {
+          animal: "cat",
+          species: "adorable"
+        },
+        {
+          animal: "bunny",
+          species: "bouncy"
+        },
+      ]);
+    });
+
+    errorBtns[8].addEventListener('click', ()=> {
+      console.time("Start Time");
+    });
+
+    errorBtns[9].addEventListener('click', ()=> {
+      console.time("End Time");
+    });
+
+    errorBtns[10].addEventListener('click', ()=> {
+      const first = () => { second(); };
+      const second = () => { console.trace(); };
+      first();
+    });
+
+    errorBtns[11].addEventListener('click', ()=> {
+      console.error("Global Error");
+    });
+
+    class NotANum extends Error {
+      constructor(message){
+        super(message);
+        this.message = message;
+        this.name = "NotANum";
+      }
+    }
+
+    window.onerror = function() {
+      console.error("You did something wrong, but right.");
+    }
+
   </script>
 </body>
 </html>
